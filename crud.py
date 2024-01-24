@@ -1,3 +1,4 @@
+import re
 import firebase_admin
 from firebase_admin import credentials, firestore
 
@@ -9,15 +10,17 @@ db = firestore.client()
 # -----------------CRUD -------------------------
 # Create a new document in Firestore
 def create_document(collection, document_data):
-    # db = firestore.client()
-    doc_ref = db.collection(collection).document()
+    custom_id = document_data["dia"]
+    custom_id = re.sub("[-/]", "_", custom_id)
+    doc_ref = db.collection(collection).document(f"{custom_id}_id")
     doc_ref.set(document_data)
     print("Document created with ID:", doc_ref.id)
 
 
 # Read a document from Firestore
 def read_document(collection, document_id):
-    # db = firestore.client()
+    document_id = re.sub("[-/]", "_", document_id)
+    document_id = f"{document_id}_id"
     doc_ref = db.collection(collection).document(document_id)
     document = doc_ref.get()
     if document.exists:
@@ -27,14 +30,16 @@ def read_document(collection, document_id):
 
 # Update a document in Firestore
 def update_document(collection, document_id, update_data):
-    db = firestore.client()
+    document_id = re.sub("[-/]", "_", document_id)
+    document_id = f"{document_id}_id"
     doc_ref = db.collection(collection).document(document_id)
     doc_ref.update(update_data)
     print('Document updated successfully!')
 
 # Delete a document from Firestore
 def delete_document(collection, document_id):
-    db = firestore.client()
+    document_id = re.sub("[-/]", "_", document_id)
+    document_id = f"{document_id}_id"
     doc_ref = db.collection(collection).document(document_id)
     doc_ref.delete()
     print("Document deleted successfully!")
@@ -79,7 +84,7 @@ while loop:
     # Print the message corresponding to the user's selection.
     if selection == "1":
         print("Has seleccionado la opción 1.")
-        what_day = int(input("Introduce el día que quieres registrar: "))
+        what_day = input("Introduce el día que quieres registrar: ")
         what_hour = int(input("Introduce las horas de sueño que quieres registrar: "))
         create_document("sueno", {"dia":what_day, "hora":what_hour})
     elif selection == "2":
@@ -99,3 +104,6 @@ while loop:
     elif selection == "5":
         print("Has decidido irte. Adiós.")
         loop = False
+
+
+db.collection("sueno").document()
