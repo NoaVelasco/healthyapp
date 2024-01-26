@@ -8,7 +8,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 formato = '(formato numérico "dd mm aaaa")'
 
-# -----------------CRUD -------------------------
+# ----------------- Funciones CRUD -------------------------
 # Create a new document in Firestore
 def create_document(collection, document_data):
     custom_id = document_data["dia"]
@@ -55,6 +55,19 @@ def comprueba(input):
         print("No es una fecha válida")
         return False
 
+options = {
+    1: 'Añadir día',
+    2: 'Consultar día',
+    3: 'Actualizar día',
+    4: 'Eliminar día',
+    5: 'Salir'
+}
+
+def menu(options):
+    print("\nMENÚ PRINCIPAL: 😴 SUEÑO\n\
+🌜✨✨✨✨✨✨✨✨✨✨✨✨✨🌛")
+    for i, option in options.items():
+        print(f"✨ {i}: {option}")
 
 # -----------------ejemplos -------------------------
 
@@ -71,50 +84,37 @@ def comprueba(input):
 # delete_document("users", "document_id123")
 # -----------------menu -------------------------
     
-options = {
-    1: 'Añadir día',
-    2: 'Consultar día',
-    3: 'Actualizar día',
-    4: 'Eliminar día',
-    5: 'Salir'
-}
-
-def menu(options):
-    print("\nMENÚ PRINCIPAL: 😴 SUEÑO\n\
-🌜✨✨✨✨✨✨✨✨✨✨✨✨✨🌛")
-    for i, option in options.items():
-        print(f"✨ {i}: {option}")
 
 
-loop = True
-print("\nTe damos la bienvenida a la mejor aplicación de salud: HealthyApp. 😉")
+if __name__ == "__main__":
+    loop = True
+    print("\nTe damos la bienvenida a la mejor aplicación de salud: HealthyApp. 😉")
 
-while loop:
-    menu(options)
+    while loop:
+        menu(options)
 
-    selection = input("🌜✨✨✨✨✨✨✨✨✨✨✨✨✨🌛\n\nElige tu opción: ")
+        selection = input("🌜✨✨✨✨✨✨✨✨✨✨✨✨✨🌛\n\nElige tu opción: ")
 
-    # Print the message corresponding to the user's selection.
-    if selection == "1":
-        fecha_correcta = False
-        while fecha_correcta is False:
-            what_day = input(f"\nIntroduce el día que quieres añadir {formato}: ")
-            fecha_correcta = comprueba(what_day)
+        # Print the message corresponding to the user's selection.
+        if selection == "1":
+            fecha_correcta = False
+            while fecha_correcta is False:
+                what_day = input(f"\nIntroduce el día que quieres añadir {formato}: ")
+                fecha_correcta = comprueba(what_day)
 
-        what_hour = int(input("Introduce las horas de sueño que quieres registrar: "))
-        create_document("sueno", {"dia":what_day, "hora":what_hour})
-    elif selection == "2":
-        what_day = input(f"\n¿Qué día quieres consultar? {formato} ")
-        read_document("sueno", what_day)
-    elif selection == "3":
-        id_input = input(f"\n¿Qué día quieres modificar? {formato} ")
-        what_hour = int(input("Introduce las horas de sueño actualizadas: "))
-        update_document("sueno", id_input, {"hora":what_hour})
-    elif selection == "4":
-        id_input = input(f"\n¿Qué día quieres eliminar? {formato} ")
-        delete_document("sueno", id_input)
+            what_hour = int(input("Introduce las horas de sueño que quieres registrar: "))
+            create_document("sueno", {"dia":what_day, "hora":what_hour})
+        elif selection == "2":
+            what_day = input(f"\n¿Qué día quieres consultar? {formato} ")
+            read_document("sueno", what_day)
+        elif selection == "3":
+            id_input = input(f"\n¿Qué día quieres modificar? {formato} ")
+            what_hour = int(input("Introduce las horas de sueño actualizadas: "))
+            update_document("sueno", id_input, {"hora":what_hour})
+        elif selection == "4":
+            id_input = input(f"\n¿Qué día quieres eliminar? {formato} ")
+            delete_document("sueno", id_input)
 
-    elif selection == "5":
-        print("Has decidido salir. Ten un buen descanso. 🌚\n")
-        loop = False
-
+        elif selection == "5":
+            print("Has decidido salir. Ten un buen descanso. 🌚\n")
+            loop = False
